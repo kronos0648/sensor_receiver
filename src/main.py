@@ -25,17 +25,21 @@ if(__name__=='__main__'):
             
         server=TCPServer(port=tcpPort,sensorCount=sensorCount)
         
-        receiver=Receiver(part='Head',baudrate=baudrate,portname=port_head,server=server)
-        receiver.openCalibration()
-        receiver.readComm(waitTime=waitTime)
         
+        list_receiver=[]
+        receiver_head=Receiver(part='Head',baudrate=baudrate,portname=port_head,server=server)
+        list_receiver.append(receiver)
+        
+        for receiver in list_receiver:
+            receiver.openCalibration()
+            receiver.readComm(waitTime=waitTime)
+
         server.accept()
-        receiver.startRecord()
+        
+        for receiver in list_receiver:
+            receiver.startRecord()
         
     except:
-        receiver.closeRecord()
+        for receiver in list_receiver:
+            receiver.closeRecord()
         server.close()
-        
-    
-    
-        
