@@ -32,7 +32,11 @@ class TCPServer:
             message+=data
             message+='/'
         message+=str(chr(3))
-        self.clientSocket.send(message.encode())
+        try:
+            self.clientSocket.send(message.encode())
+        except:
+            self.clientSocket.close()
+            self.accept()
         self.derivedDataSet.clear()
         
         
