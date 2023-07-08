@@ -29,12 +29,6 @@ class Receiver:
             return True
         else: return False
     
-    """  
-    def startFieldCalibration(self):
-        if(self.imu.IsOpen()):
-            self.imu.UnlockReg()
-            self.imu.StartFieldCalibration()
-    """ 
     
     def __IsReadReg(self,reg,waitTime):
         bRet=False
@@ -53,6 +47,7 @@ class Receiver:
     
 
     def __onRecord(self,deviceModel : DeviceModel):
+        
         for data in self.server.derivedDataSet:
             if(self.part==data.part): return
             
