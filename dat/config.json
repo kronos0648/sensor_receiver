@@ -5,6 +5,6 @@
     "WaitTime" : 200,
     "SerialPort" : 
     {
-        "Head" : "ttyUSB"
+        "Head" : "ttyUSB1"
     }
 }
