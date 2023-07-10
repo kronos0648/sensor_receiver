@@ -8,7 +8,7 @@ class TCPServer:
     def __init__(self,port,sensorCount):
         self.sensorCount=sensorCount
         self.derivedDataSet=[]
-        self.host='127.0.0.1'
+        self.host=''
         self.port=port
         self.clientSocket=None
         self.serverSocket=socket(AF_INET,SOCK_STREAM)
@@ -24,7 +24,9 @@ class TCPServer:
         
     #도출 데이터 저장 메소드
     def addDerivedData(self,derivedData : DerivedData):
-        self.derivedDataSet.append(json.dumps(derivedData))
+        dict_derivedData=derivedData.__dict__
+        dict_derivedData['velocity']=dict_derivedData['velocity'].tolist()
+        self.derivedDataSet.append(json.dumps(dict_derivedData))
         
         #모든 센서의 도출 데이터 축적 시 스켈레톤 렌더러로 데이터셋 전송
         if(len(self.derivedDataSet)==self.sensorCount):
@@ -37,9 +39,11 @@ class TCPServer:
         for data in self.derivedDataSet:
             message+=data
             message+='/' #Delimeter
+
         message+=str(chr(3)) # ETX
         try:
             self.clientSocket.send(message.encode())
+            self.clientSocket.recv(1024).decode()
             
         except: #소켓 연결 해제 시 재연결 대기
             self.clientSocket.close()

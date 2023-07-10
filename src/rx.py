@@ -42,14 +42,12 @@ class Receiver:
         self.__IsReadReg(0x03,waitTime)
         self.imu.SendWriteReg(0x03,0x06)
         self.imu.SaveReg()
-        self.calc=Calculator(waitTime)
+        self.calc=Calculator(part=self.part,time_unit=waitTime)
         
     #데이터 측정 이벤트 메소드
     def __onRecord(self,deviceModel : DeviceModel):
-        
         for data in self.server.derivedDataSet:
             if(self.part==data.part): return
-            
         rx=RxData()
         
         # 3차원 벡터로 저장
