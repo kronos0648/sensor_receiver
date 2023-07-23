@@ -1,8 +1,9 @@
 {
     "BaudRate" : 115200,
-    "TCPPort" : 7000,
+    "TCPPort" : 8000,
+    "WaitTime" : 5,
+    "Accumulation" : 40,
     "SensorCount" : 1,
-    "WaitTime" : 200,
     "SerialPort" : 
     {
         "Head" : "/dev/ttyUSB0"

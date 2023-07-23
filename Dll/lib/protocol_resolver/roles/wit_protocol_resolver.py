@@ -373,6 +373,14 @@ class WitProtocolResolver(IProtocolResolver):
         """
         tempBytes = self.get_writebytes(0x00, 0x00)                      #获取写入指令
         success_bytes = deviceModel.serialPort.write(tempBytes)          #写入寄存器
+        
+    def restart(self,deviceModel):
+        tempBytes = self.get_writebytes(0x00, 0xFF)
+        success_bytes = deviceModel.serialPort.write(tempBytes)
+        
+    def factoryReset(self,deviceModel):
+        tempBytes = self.get_writebytes(0x00, 0x01)
+        success_bytes = deviceModel.serialPort.write(tempBytes)
 
     def AccelerationCalibration(self, deviceModel):
         """

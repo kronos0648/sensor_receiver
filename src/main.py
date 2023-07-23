@@ -9,9 +9,9 @@ if(__name__=='__main__'):
     tcpPort:int
     sensorCount:int
     waitTime:int
-    serialPort=None
-    port_head:str
-    receiver=None
+    accumulation:int
+    part_port_pair:dict={}
+
     
     try:
         #Configuration
@@ -21,17 +21,22 @@ if(__name__=='__main__'):
             tcpPort=config['TCPPort']
             sensorCount=config['SensorCount']
             waitTime=config['WaitTime']
+            accumulation=config['Accumulation']
             serialPort=config['SerialPort']
-            port_head=serialPort['Head']
+            parts=serialPort.keys()
+            for part in parts:
+                port=serialPort[part]
+                part_port_pair[part]=port
             
         #서버 객체 생성
         server=TCPServer(port=tcpPort,sensorCount=sensorCount)
         
-        
-        #센서 수신체 리스트 및 센서 수신체 생성
+        #센서 수신체 리스트 및 센서 수신체 생성        
         list_receiver=[]
-        receiver_head=Receiver(part='Head',baudrate=baudrate,portname=port_head,server=server)
-        list_receiver.append(receiver_head)
+        parts=part_port_pair.keys()
+        for part in parts:
+            receiver=Receiver(part=part,accumulation=accumulation,baudrate=baudrate,portname=part_port_pair[part],server=server)
+            list_receiver.append(receiver)
         
         #일괄 캘리브레이션 및 레지스터 읽기 모드
         for receiver in list_receiver:

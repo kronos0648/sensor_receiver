@@ -230,6 +230,14 @@ class DeviceModel:
         """
         if self.protocolResolver is not None:
             self.protocolResolver.save(self)
+            
+    def restart(self):
+        if self.protocolResolver is not None:
+            self.protocolResolver.restart(self)
+            
+    def factoryReset(self):
+        if self.protocolResolver is not None:
+            self.protocolResolver.factoryReset(self)
 
     def AppliedCalibration(self):
         """

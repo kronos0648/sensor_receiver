@@ -163,6 +163,12 @@ class JY901(IOperatingEquipment):
         :return:
         """
         self.device.save()
+        
+    def RestartReg(self):
+        self.device.restart()
+        
+    def FactoryResetReg(self):
+        self.device.factoryReset()
 
     def SetReturnRate(self, rate):
         """
