@@ -39,16 +39,16 @@ class DeviceModel:
     serialPort = None
 
     # 串口配置
-    serialConfig = SerialConfig()
+    
 
     # 更新触发器
     dataUpdateListener = ""
 
     # 数据解析器
-    dataProcessor = None
+    #dataProcessor = None
 
     # 协议解析器
-    protocolResolver = None
+    #protocolResolver = None
 
     # 485读取开始寄存器
     StartReadReg = 0x2e
@@ -63,6 +63,7 @@ class DeviceModel:
         :param dataProcessor: 数据处理
         :param dataUpdateListener:
         """
+        self.serialConfig = SerialConfig()
         self.deviceName = deviceName
         self.protocolResolver = protocolResolver
         self.dataProcessor = dataProcessor
@@ -105,6 +106,7 @@ class DeviceModel:
         :return:
         """
         print("启动" + threadName)
+        print('serial port : ',self.serialPort.port)
         while True:
             # 如果串口打开了
             if self.isOpen:
@@ -118,6 +120,7 @@ class DeviceModel:
             else:
                 time.sleep(0.1)
                 print("暂停")
+                print('break')
                 break
 
     def openDevice(self):
@@ -125,9 +128,9 @@ class DeviceModel:
         打开设备
         :return: 无返回
         """
-
         # 先关闭端口
         self.closeDevice()
+        print('portname : ',self.serialConfig.portName)
         try:
             self.serialPort = serial.Serial(self.serialConfig.portName, self.serialConfig.baud, timeout=0.5)
             self.isOpen = True

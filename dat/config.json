@@ -1,7 +1,7 @@
 {
     "BaudRate" : 115200,
     "TCPPort" : 8000,
-    "WaitTime" : 5,
+    "WaitTime" : 100,
     "Accumulation" : 40,
     "SensorCount" : 2,
     "SerialPort" : 

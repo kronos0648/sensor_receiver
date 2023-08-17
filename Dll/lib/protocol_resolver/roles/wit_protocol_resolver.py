@@ -15,6 +15,9 @@ class WitProtocolResolver(IProtocolResolver):
     TempFindValues = []    # 读取指定寄存器返回的数据
     isFirst = True
     iFindStartReg = -1      # 读取的首个寄存器
+    
+    models=[]
+    
 
     def setConfig(self, deviceModel):
         pass
@@ -52,6 +55,7 @@ class WitProtocolResolver(IProtocolResolver):
                         if self.isFirst == False:
                             deviceModel.dataProcessor.onUpdate(deviceModel)  # 触发数据更新事件
                         else:
+                            self.models.append(deviceModel)
                             self.isFirst = False
                         self.get_acc(self.TempBytes, deviceModel)      #结算加速度数据
                     elif self.TempBytes[1] == 0x52:                    #角速度包

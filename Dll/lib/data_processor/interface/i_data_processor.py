@@ -8,7 +8,7 @@ class IDataProcessor(metaclass=ABCMeta):
     :param metaclass:
     :return:
     """
-    onVarChanged = []
+    
 
     @abstractmethod
     def onOpen(self, deviceModel):
@@ -17,6 +17,10 @@ class IDataProcessor(metaclass=ABCMeta):
     @abstractmethod
     def onClose(self):
         pass
+
+    #@abstractmethod
+    #def onUpdate(self,*args):
+    #    pass
 
     @staticmethod
     def onUpdate(*args):

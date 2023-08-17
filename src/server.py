@@ -38,10 +38,10 @@ class TCPServer:
         return json.dumps(dict_derivedData)
         
     def addRawData(self,data : DerivedData):
-         self.totalRawData.append(data)
-         if(self.sensorCount==len(self.totalRawData)):
-             self.writeRawData()
-             self.totalRawData.clear()
+        self.totalRawData.append(data)
+        if(self.sensorCount==len(self.totalRawData)):
+            self.writeRawData()
+            self.totalRawData.clear()
              
         
     def writeRawData(self):

@@ -27,6 +27,7 @@ class Receiver:
         self.server:TCPServer=server
         self.file=open('dat/stopdata.csv','a')
         self.wr=csv.writer(self.file)
+        self.op=False
         
     #캘리브레이션 메소드
     def openCalibration(self):
@@ -56,8 +57,8 @@ class Receiver:
         
         
     #데이터 측정 이벤트 메소드
-    def __onRecord(self,deviceModel : DeviceModel):
-
+    async def __onRecord(self,deviceModel : DeviceModel):
+        #print('onrecord',self.part)
         rx=RxData()
         # 3차원 벡터로 저장
         rx.acc=np.array([deviceModel.GetDeviceData('AccX'), deviceModel.GetDeviceData('AccY'), deviceModel.GetDeviceData('AccZ')])
@@ -133,6 +134,7 @@ class Receiver:
     #데이터 측정 이벤트 핸들러 등록 메소드
     def startRecord(self):
         self.imu.AddOnRecord(self.__onRecord)
+        print(self.part,self.imu.device)
         
     #데이터 측정 이벤트 핸들러 제거 메소드
     def closeRecord(self):

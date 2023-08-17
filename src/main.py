@@ -5,6 +5,7 @@ from rx import Receiver
 from server import TCPServer
 from threading import Thread
 import time
+import asyncio
 
 if(__name__=='__main__'):
     baudrate:int
@@ -35,35 +36,39 @@ if(__name__=='__main__'):
         server=TCPServer(port=tcpPort,sensorCount=sensorCount)
         list_receiver=[]
         
-        def openReceiver(part):
+        async def openReceiver(part):
+            print(part,'\t',part_port_pair[part])
             receiver=Receiver(part=part,accumulation=accumulation,baudrate=baudrate,portname=part_port_pair[part],server=server)
             list_receiver.append(receiver)
             receiver.openCalibration()
             receiver.readComm(waitTime=waitTime)
         
         #센서 수신체 리스트 및 센서 수신체 생성        
-        
-        threads_open=[]
         parts=part_port_pair.keys()
         for part in parts:
-            thread_open=Thread(target=openReceiver(part))
-            threads_open.append(thread_open)
-            thread_open.start()
+            loop=asyncio.get_event_loop()
+            loop.run_until_complete(openReceiver(part))
 
-        for thread in threads_open:
-            thread.join()
         
         print('IMU Opened')
         #스켈레톤 렌더러 접속 대기
-        server.accept()
+        #server.accept()
         
         def record(receiver : Receiver):
             receiver.startRecord()
         
         #스켈레톤 렌더러 접속 완료 이후에 데이터 측정 이벤트 등록        
+        #for receiver in list_receiver:
+        #    thread_record=Thread(target=record(receiver))
+        #    thread_record.start()
+        
         for receiver in list_receiver:
-            thread_record=Thread(target=record(receiver))
-            thread_record.start()
+            receiver.startRecord()
+            
+        for receiver in list_receiver:
+            print('test')
+            print(receiver.part,' : ',receiver.imu.device.GetDeviceData('AccX'))
+        
         
     except:
         for receiver in list_receiver:

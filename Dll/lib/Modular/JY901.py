@@ -27,6 +27,8 @@ class JY901(IOperatingEquipment):
             JY901SDataProcessor(),
             "51_0"
         )
+        print('resolver : ',self.device.protocolResolver)
+        print('processor : ',self.device.dataProcessor)
 
     def GetDeviceName(self):
         """
@@ -69,7 +71,7 @@ class JY901(IOperatingEquipment):
         :return:
         """
         self.device.dataProcessor.onVarChanged.append(eventOnRecord)  # 数据更新事件
-
+        self.device.dataProcessor.models.append(self.device)
     def RemoveOnRecord(self, eventOnRecord):
         """
         移除事件
@@ -77,6 +79,7 @@ class JY901(IOperatingEquipment):
         :return:
         """
         self.device.dataProcessor.onVarChanged.remove(eventOnRecord)  # 数据更新事件
+        self.device.dataProcessor.models.remove(self.device)
 
     def IsOpen(self):
         """
