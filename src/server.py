@@ -2,6 +2,8 @@ from socket import *
 from calculator import DerivedData
 import json
 import asyncio
+import csv
+import sys
 
 #스켈레톤 렌더러와 통신할 TCP Server 클래스
 class TCPServer:
@@ -14,6 +16,9 @@ class TCPServer:
         self.clientSocket=None
         self.serverSocket=socket(AF_INET,SOCK_STREAM)
         self.serverSocket.bind((self.host,self.port))
+        self.totalRawData=[]
+        self.file=open('dat/'+sys.argv[1]+'.csv','a')
+        self.wr=csv.writer(self.file)
         
         
         
@@ -32,6 +37,31 @@ class TCPServer:
         dict_derivedData=derivedData.__dict__
         return json.dumps(dict_derivedData)
         
+    def addRawData(self,data : DerivedData):
+         self.totalRawData.append(data)
+         if(self.sensorCount==len(self.totalRawData)):
+             self.writeRawData()
+             self.totalRawData.clear()
+             
+        
+    def writeRawData(self):
+        armData:DerivedData
+        legData:DerivedData
+        for dat in self.totalRawData:
+            if(dat.part=='arm'):
+                armData=dat
+            elif(dat.part=='leg'):
+                legData=dat
+                
+        self.wr.writerow([armData.time,
+                          armData.acc[0],armData.acc[1],armData.acc[2],
+                          armData.gyro[0],armData.gyro[1],armData.gyro[2],
+                          armData.roll,armData.pitch,armData.yaw,
+                          legData.acc[0],legData.acc[1],legData.acc[2],
+                          legData.gyro[0],legData.gyro[1],legData.gyro[2],
+                          legData.roll,legData.pitch,legData.yaw
+                          ])
+                
         
         
     #도출 데이터셋 전송 메소드

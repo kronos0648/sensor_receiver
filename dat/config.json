@@ -3,9 +3,10 @@
     "TCPPort" : 8000,
     "WaitTime" : 5,
     "Accumulation" : 40,
-    "SensorCount" : 1,
+    "SensorCount" : 2,
     "SerialPort" : 
     {
-        "Head" : "/dev/ttyUSB0"
+        "arm" : "/dev/ttyUSB0",
+        "leg" : "/dev/ttyUSB1"
     }
 }
